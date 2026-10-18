@@ -5,44 +5,41 @@
 import sqlite3
 
 try:
-conexion = sqlite3.connect("academia.db")
-cursor = conexion.cursor()
+    conexion = sqlite3.connect("academia.db")
+    cursor = conexion.cursor()
 
-# Crear la tabla de cursos
-cursor.execute("""
-CREATE TABLE IF NOT EXISTS T_CURSOS (
-id_curso INTEGER PRIMARY KEY AUTOINCREMENT,
-nombre VARCHAR(100) NOT NULL,
-descripcion TEXT,
-precio REAL NOT NULL,
-horario VARCHAR(25) NOT NULL
+    # Crear la tabla de cursos
+    cursor.execute("""
+        CREATE TABLE IF NOT EXISTS T_CURSOS (
+            id_curso INTEGER PRIMARY KEY AUTOINCREMENT,
+            nombre VARCHAR(100) NOT NULL,
+            descripcion TEXT,
+            precio REAL NOT NULL,
+            certificacion INTEGER,
+            horario VARCHAR(25) NOT NULL
+        )
+    """)
 
-)
-""")
+    # Datos iniciales
+    cursor.execute(
+        "INSERT INTO T_CURSOS VALUES (null,?,?,?,?,?)",
+        ("Python Básico", "Curso de Python iniciación", 300, 1, "Mañanas")
+    )
 
-# Datos iniciales
-cursor.execute(
-"INSERT OR IGNORE INTO T_CURSOS VALUES (null,?,?,?,?)",
-("Python Básico", "Curso de Python iniciación",300,'Mañanas')
-)
+    cursor.execute(
+        "INSERT INTO T_CURSOS VALUES (null,?,?,?,?,?)",
+        ("Python Avanzado", "Curso de Python Avanzado", 500, 1, "Tardes")
+    )
 
-cursor.execute(
-"INSERT OR IGNORE INTO T_CURSOS VALUES (null,?,?,?,?)",
-("Python Avanzado", "Curso de Python Avanzado",500,'Tardes')
-)
+    conexion.commit()
 
-
-
-
-conexion.commit()
-
-print("Base de datos creada correctamente.")
+    print("Base de datos creada correctamente.")
 
 except sqlite3.Error as error:
-print("Se ha producido un error con la base de datos:", error)
+    print("Se ha producido un error con la base de datos:", error)
 
 finally:
-try:
-conexion.close()
-except NameError:
-pass
+    try:
+        conexion.close()
+    except NameError:
+        pass
